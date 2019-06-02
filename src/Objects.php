@@ -63,4 +63,105 @@ class Objects
   {
     return array_pop(explode('\\', get_class($object)));
   }
+
+  /**
+   * @param object $object
+   * @param array $propertyTypeMap
+   * @param bool $allowNullValues
+   * @param bool $throwExceptions
+   * @return bool
+   * @throws \Exception
+   */
+  public static function validatePropertyTypes(
+    object $object,
+    array $propertyTypeMap,
+    bool $allowNullValues = false,
+    bool $throwExceptions = false
+  )
+  {
+    // For each item in the property type map as $propertyName => $type
+    foreach ($propertyTypeMap as $propertyName => $expectedType)
+    {
+      // Get the type of the property
+      $propertyExists = property_exists($object, $propertyName);
+
+      // If the property doesn't exist
+      if (!$propertyExists)
+      {
+        if ($throwExceptions)
+        {
+          throw new \Exception("Object validation failed: property '$propertyName' does not exist");
+        }
+        else
+        {
+          return false;
+        }
+      }
+
+      // Get the property type
+      $propertyType = gettype($object->{$propertyName});
+
+      // If property is null
+      if ($propertyType == 'NULL')
+      {
+        if ($allowNullValues)
+        {
+          continue;
+        }
+        else
+        {
+          if ($throwExceptions)
+          {
+            throw new \Exception("Object validation failed: property value null, '$expectedType' expected.");
+          }
+          else
+          {
+            return false;
+          }
+        }
+      }
+
+      // If property is an object
+      if ($propertyType == 'object')
+      {
+        // If expected type is 'object'
+        if ($expectedType == 'object')
+        {
+          continue;
+        }
+
+        $fqns = get_class($object->{$propertyName});
+
+        if ($expectedType == $fqns)
+        {
+          continue;
+        }
+
+        if ($throwExceptions)
+        {
+          throw new \Exception("Object validation failed: property value of type $propertyType, instance of $expectedType expected.");
+        }
+        else
+        {
+          return false;
+        }
+      }
+
+      // Check type directly
+      if ($propertyType !== $expectedType)
+      {
+        if ($throwExceptions)
+        {
+          throw new \Exception("Object validation failed: property value of type $propertyType, $expectedType expected.");
+        }
+        else
+        {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
 }
