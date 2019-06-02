@@ -1,12 +1,6 @@
 {
 	"name": "electra-utility",
 	"minimum-stability": "dev",
-	"repositories": [
-		{
-			"type": "vcs",
-			"url":  "https://github.com/ieatstickers/electra-utility.git"
-		}
-	],
 	"authors": [
 		{
 			"name": "Mike Burke"
