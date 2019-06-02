@@ -13,7 +13,6 @@ class Objects
    */
   public static function hydrate(object $destination, object $source,  array $properties = null): object
   {
-
     if(!is_object($destination) || !is_object($source))
     {
       throw new \Exception("Cannot hydrate object. Source and destination must both be of type 'object'.");
@@ -54,5 +53,14 @@ class Objects
   public static function getPublicProperties(object $object): array
   {
     return array_keys(get_object_vars($object));
+  }
+
+  /**
+   * @param object $object
+   * @return string
+   */
+  public static function getClassName(object $object): string
+  {
+    return array_pop(explode('\\', get_class($object)));
   }
 }
