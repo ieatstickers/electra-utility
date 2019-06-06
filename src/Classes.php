@@ -10,7 +10,8 @@ class Classes
    */
   public static function getClassName(string $fqns): string
   {
-    return array_pop(explode('\\', $fqns));
+    $fqnsParts = explode('\\', $fqns);
+    return array_pop($fqnsParts);
   }
 
 }
