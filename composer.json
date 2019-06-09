@@ -1,5 +1,5 @@
 {
-	"name": "electra-utility",
+	"name": "electra/utility",
 	"minimum-stability": "dev",
 	"authors": [
 		{
