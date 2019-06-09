@@ -30,4 +30,20 @@ class Strings
     return (substr($string, -$len) === $endsWith);
   }
 
+  /**
+   * @param string $string
+   * @param array $replacements
+   * @return string
+   *
+   */
+  public static function replace(string $string, array $replacements): string
+  {
+    foreach ($replacements as $placeholder => $replacement)
+    {
+      $string = preg_replace("/$placeholder/", $replacement, $string);
+    }
+
+    return $string;
+  }
+
 }
