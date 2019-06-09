@@ -10,6 +10,9 @@ class Objects
    * @param array|null $properties
    * @return mixed|null
    * @throws \Exception
+   *
+   * Hydrates all public properties on the destination object with values from
+   * the source (if they exist on the source).
    */
   public static function hydrate(object $destination, object $source,  array $properties = null): object
   {
@@ -162,6 +165,59 @@ class Objects
     }
 
     return true;
+  }
+
+  /**
+   * @param object $object
+   * @param array $requiredProperties
+   * @param bool $throwExceptions
+   * @return bool
+   * @throws \Exception
+   */
+  public static function validatePropertiesExist(
+    object $object,
+    array $requiredProperties,
+    bool $throwExceptions = false
+  )
+  {
+    // For each item in the property type map as $propertyName => $type
+    foreach ($requiredProperties as $propertyName)
+    {
+      // Get the type of the property
+      $propertyExists = property_exists($object, $propertyName);
+
+      // If the property doesn't exist
+      if (!$propertyExists)
+      {
+        if ($throwExceptions)
+        {
+          throw new \Exception("Object validation failed: property '$propertyName' does not exist");
+        }
+        else
+        {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * @param object $source
+   * @param object $destination
+   * @return object
+   */
+  public static function copyAllProperties(object $source, object $destination): object
+  {
+    $sourcePublicProperties = self::getPublicProperties($source);
+
+    foreach ($sourcePublicProperties  as $publicProperty)
+    {
+      $destination->{$publicProperty} = $source->{$publicProperty};
+    }
+
+    return $destination;
   }
 
 }
