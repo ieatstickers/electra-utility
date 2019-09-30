@@ -7,14 +7,13 @@ class Objects
   /**
    * @param object $destination
    * @param object $source
+   * @param array $mutators
    * @param array|null $properties
    * @return mixed|null
-   * @throws \Exception
-   *
-   * Hydrates all public properties on the destination object with values from
+   * @throws \Exception Hydrates all public properties on the destination object with values from
    * the source (if they exist on the source).
    */
-  public static function hydrate(object $destination, object $source,  array $properties = null): object
+  public static function hydrate(object $destination, object $source, array $mutators = [], array $properties = null): object
   {
     if(!is_object($destination) || !is_object($source))
     {
@@ -31,7 +30,18 @@ class Objects
         && (!$properties || in_array($property, $properties))
       )
       {
-        $destination->{$property} = $source->{$property};
+        $mutator = Arrays::getByKey($property, $mutators);
+
+        if ($mutator)
+        {
+          $sourceValue = $mutator($source->{$property});
+        }
+        else
+        {
+          $sourceValue = $source->{$property};
+        }
+
+        $destination->{$property} = $sourceValue;
       }
     }
 
