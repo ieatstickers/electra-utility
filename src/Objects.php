@@ -7,10 +7,11 @@ class Objects
   /**
    * @param object $destination
    * @param object $source
-   * @param array $mutators
    * @param array|null $properties
    * @return mixed|null
-   * @throws \Exception Hydrates all public properties on the destination object with values from
+   * @throws \Exception
+   *
+   * Hydrates all public properties on the destination object with values from
    * the source (if they exist on the source).
    */
   public static function hydrate(object $destination, object $source, array $mutators = [], array $properties = null): object
@@ -216,15 +217,38 @@ class Objects
   /**
    * @param object $source
    * @param object $destination
+   * @param array $mutators
+   * @param array $excludedProperties
    * @return object
    */
-  public static function copyAllProperties(object $source, object $destination): object
+  public static function copyAllProperties(
+    object $source,
+    object $destination,
+    array $mutators = [],
+    array $excludedProperties = []
+  ): object
   {
     $sourcePublicProperties = self::getPublicProperties($source);
 
     foreach ($sourcePublicProperties  as $publicProperty)
     {
-      $destination->{$publicProperty} = $source->{$publicProperty};
+      if (in_array($publicProperty, $excludedProperties))
+      {
+        continue;
+      }
+
+      $mutator = Arrays::getByKey($publicProperty, $mutators);
+
+      if ($mutator)
+      {
+        $sourceValue = $mutator($source->{$publicProperty});
+      }
+      else
+      {
+        $sourceValue = $source->{$publicProperty};
+      }
+
+      $destination->{$publicProperty} = $sourceValue;
     }
 
     return $destination;
