@@ -9,7 +9,8 @@ class Mutators
   /** @return callable */
   public static function carbonToDateString(): callable
   {
-    return function($carbon) {
+    return function($carbon)
+    {
       if ($carbon instanceof Carbon)
       {
         return $carbon->toDateString();
