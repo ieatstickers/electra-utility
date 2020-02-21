@@ -6,26 +6,34 @@ use Carbon\Carbon;
 
 class Mutators
 {
-  /**
-   * @param string $dateTime
-   * @return Carbon
-   * @throws \Exception
-   */
-  public static function dateTimeToCarbon(string $dateTime): Carbon
+  /** @return callable */
+  public static function dateToCarbon(): callable
   {
-    if ($dateTime instanceof Carbon) return $dateTime;
-    return new Carbon($dateTime);
+    return function($date)
+    {
+      if ($date instanceof Carbon || is_null($date)) return $date;
+      return new Carbon($date);
+    };
   }
 
-  /**
-   * @param Carbon $carbon
-   * @return Carbon
-   * @throws \Exception
-   */
-  public static function carbonToDateTime(Carbon $carbon): string
+  /** @return callable */
+  public static function dateTimeToCarbon(): callable
   {
-    if ($carbon instanceof Carbon) return $carbon;
-    return new Carbon($carbon);
+    return function($dateTime)
+    {
+      if ($dateTime instanceof Carbon || is_null($dateTime)) return $dateTime;
+      return new Carbon($dateTime);
+    };
+  }
+
+  /** @return callable */
+  public static function carbonToDateTime(): callable
+  {
+    return function($carbon) {
+      if ($carbon instanceof Carbon || is_null($carbon)) return $carbon;
+      return new Carbon($carbon);
+    };
+
   }
 
 }
