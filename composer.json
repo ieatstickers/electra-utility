@@ -10,5 +10,8 @@
 		"psr-4": {
 			"Electra\\Utility\\": "src"
 		}
+	},
+	"require": {
+		"nesbot/carbon": "^2.0@dev"
 	}
 }
