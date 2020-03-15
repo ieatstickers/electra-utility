@@ -54,4 +54,30 @@ class Mutators
     };
   }
 
+  /**
+   * @param string $enumFqns
+   * @return callable
+   */
+  public static function toEnumInstance(string $enumFqns): callable
+  {
+    return function ($value) use ($enumFqns) {
+      if (is_a($value, $enumFqns) || is_null($value)) return $value;
+      return call_user_func("{$enumFqns}::create()", $value);
+    };
+  }
+
+  /** @return callable */
+  public static function toEnumValue(): callable
+  {
+    return function($enumInstance)
+    {
+      if (method_exists($enumInstance, 'getValue'))
+      {
+        return $enumInstance->getValue();
+      }
+
+      return $enumInstance;
+    };
+  }
+
 }
