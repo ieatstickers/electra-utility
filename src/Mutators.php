@@ -49,7 +49,8 @@ class Mutators
   {
     return function($dateTime)
     {
-      if ($dateTime instanceof Carbon || is_null($dateTime)) return $dateTime;
+      if (!$dateTime) return null;
+      if ($dateTime instanceof Carbon) return $dateTime;
       return new Carbon($dateTime);
     };
   }
