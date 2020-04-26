@@ -25,7 +25,8 @@ class Mutators
   {
     return function($dateString)
     {
-      if ($dateString instanceof Carbon || is_null($dateString)) return $dateString;
+      if (!$dateString) return null;
+      if ($dateString instanceof Carbon) return $dateString;
       return new Carbon($dateString);
     };
   }
