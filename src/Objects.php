@@ -21,29 +21,25 @@ class Objects
       throw new \Exception("Cannot hydrate object. Source and destination must both be of type 'object'.");
     }
 
-    // Get properties to copy
-    $destPublicProperties = self::getPublicProperties($destination);
+    foreach (self::getPublicProperties($destination) as $property) {
 
-    foreach ($destPublicProperties as $property)
-    {
-      if (
-        isset($source->{$property})
-        && (!$properties || in_array($property, $properties))
-      )
+      if (!isset($source->{$property}) || ($properties && !in_array($property, $properties)))
       {
-        $mutator = Arrays::getByKey($property, $mutators);
-
-        if ($mutator)
-        {
-          $sourceValue = $mutator($source->{$property});
-        }
-        else
-        {
-          $sourceValue = $source->{$property};
-        }
-
-        $destination->{$property} = $sourceValue;
+        continue;
       }
+
+      $mutator = Arrays::getByKey($property, $mutators);
+
+      if ($mutator)
+      {
+        $sourceValue = $mutator($source->{$property});
+      }
+      else
+      {
+        $sourceValue = $source->{$property};
+      }
+
+      $destination->{$property} = $sourceValue;
     }
 
     return $destination;
