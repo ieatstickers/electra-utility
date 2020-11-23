@@ -11,12 +11,7 @@ class Mutators
   {
     return function($carbon)
     {
-      if ($carbon instanceof Carbon)
-      {
-        return $carbon->toDateString();
-      }
-
-      return $carbon;
+      return Mutate::carbonToDateString($carbon);
     };
   }
 
@@ -25,9 +20,7 @@ class Mutators
   {
     return function($dateString)
     {
-      if (!$dateString) return null;
-      if ($dateString instanceof Carbon) return $dateString;
-      return new Carbon($dateString);
+      return Mutate::dateStringToCarbon($dateString);
     };
   }
 
@@ -36,12 +29,7 @@ class Mutators
   {
     return function($carbon)
     {
-      if ($carbon instanceof Carbon)
-      {
-        return $carbon->toDateTimeString();
-      }
-
-      return $carbon;
+      return Mutate::carbonToDateTimeString($carbon);
     };
   }
 
@@ -50,9 +38,7 @@ class Mutators
   {
     return function($dateTime)
     {
-      if (!$dateTime) return null;
-      if ($dateTime instanceof Carbon) return $dateTime;
-      return new Carbon($dateTime);
+      return Mutate::dateTimeStringToCarbon($dateTime);
     };
   }
 
@@ -63,8 +49,7 @@ class Mutators
   public static function toEnumInstance(string $enumFqns): callable
   {
     return function ($value) use ($enumFqns) {
-      if (is_a($value, $enumFqns) || is_null($value)) return $value;
-      return call_user_func("{$enumFqns}::create()", $value);
+      return Mutate::toEnumInstance($enumFqns, $value);
     };
   }
 
@@ -73,12 +58,7 @@ class Mutators
   {
     return function($enumInstance)
     {
-      if (method_exists($enumInstance, 'getValue'))
-      {
-        return $enumInstance->getValue();
-      }
-
-      return $enumInstance;
+      return Mutate::toEnumValue($enumInstance);
     };
   }
 
