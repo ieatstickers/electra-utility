@@ -46,4 +46,14 @@ class Strings
     return $string;
   }
 
+  /**
+   * @param string $string
+   *
+   * @return string
+   */
+  public static function titleize(string $string): string
+  {
+    return preg_replace('!\s+!', ' ', ucwords(trim($string)));
+  }
+
 }
