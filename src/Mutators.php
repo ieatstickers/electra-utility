@@ -62,4 +62,22 @@ class Mutators
     };
   }
 
+  /** @return callable */
+  public static function arrayToJsonString(): callable
+  {
+    return function($array)
+    {
+      return Mutate::arrayToJsonString($array);
+    };
+  }
+
+  /** @return callable */
+  public static function jsonStringToArray(): callable
+  {
+    return function($jsonString)
+    {
+      return Mutate::jsonStringToArray($jsonString);
+    };
+  }
+
 }

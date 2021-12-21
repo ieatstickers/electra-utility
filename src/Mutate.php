@@ -89,4 +89,38 @@ class Mutate
     return $enumInstance;
   }
 
+  /**
+   * @param $array
+   *
+   * @return false|mixed|string
+   */
+  public static function arrayToJsonString($array)
+  {
+    if (is_array($array))
+    {
+      return json_encode($array);
+    }
+
+    return $array;
+  }
+
+  /**
+   * @param $jsonString
+   *
+   * @return mixed|string
+   */
+  public static function jsonStringToArray($jsonString)
+  {
+    if (is_string($jsonString))
+    {
+      try {
+        return json_decode($jsonString);
+      }
+      catch(\Exception $exception)
+      {}
+    }
+
+    return $jsonString;
+  }
+
 }
