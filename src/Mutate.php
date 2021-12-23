@@ -81,7 +81,7 @@ class Mutate
    */
   public static function toEnumValue($enumInstance)
   {
-    if (method_exists($enumInstance, 'getValue'))
+    if (is_object($enumInstance) && method_exists($enumInstance, 'getValue'))
     {
       return $enumInstance->getValue();
     }
