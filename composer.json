@@ -1,6 +1,7 @@
 {
 	"name": "electra/utility",
 	"minimum-stability": "dev",
+  "prefer-stable": true,
 	"authors": [
 		{
 			"name": "Mike Burke"
