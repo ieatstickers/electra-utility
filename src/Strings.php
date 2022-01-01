@@ -4,6 +4,12 @@ namespace Electra\Utility;
 
 class Strings
 {
+  /** @return string */
+  public static function randomId(): string
+  {
+    return uniqid(rand());
+  }
+
   /**
    * @param string $string
    * @param string $startsWith
